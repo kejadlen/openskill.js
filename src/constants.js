@@ -5,6 +5,7 @@ export const sigma = (options) => options?.sigma ?? mu(options) / z(options)
 export const epsilon = (options) => options?.epsilon ?? 0.0001
 export const beta = (options) => options?.beta ?? sigma(options) / 2
 export const betaSq = (options) => beta(options) ** 2
+export const tau = (options) => options?.tau ?? 0
 
 export default (options) => ({
   EPSILON: epsilon(options),
@@ -12,4 +13,5 @@ export default (options) => ({
   BETA: beta(options),
   BETASQ: betaSq(options),
   Z: z(options),
+  TAU: tau(options),
 })
