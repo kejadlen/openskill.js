@@ -4,7 +4,6 @@ import models from './models'
 
 const rate = (teams, options = {}) => {
   const model = models[options.model || 'plackettLuce']
-  const processedTeams = teams
 
   // if rank provided, use it, otherwise transition scores and use that
   const rank =
@@ -12,7 +11,7 @@ const rate = (teams, options = {}) => {
     options.score?.map((points) => -points) ??
     range(1, teams.length + 1)
 
-  const [orderedTeams, tenet] = unwind(rank, processedTeams)
+  const [orderedTeams, tenet] = unwind(rank, teams)
   const newRatings = model(orderedTeams, {
     ...options,
     rank: sortBy(identity, rank),
