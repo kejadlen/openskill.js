@@ -29,18 +29,30 @@ export const rankings = (teams, rank = []) => {
 }
 
 // this is basically shared code, precomputed for every model
-const teamRating = (options) => (game) => {
-  const rank = rankings(game, options.rank)
-  return game.map((team, i) => [
-    // mu[i]
-    team.map(({ mu }) => mu).reduce(sum, 0),
-    // sigma^2[i]
-    team.map(({ sigma }) => sigma * sigma).reduce(sum, 0),
-    // (original team data)
-    team,
-    // rank[i]
-    rank[i],
-  ])
+const teamRating = (options) => {
+  return (game) => {
+    const rank = rankings(game, options.rank)
+    const out = game.map((team, i) => [
+      // mu[i]
+      team.map(({ mu }) => mu).reduce(sum, 0),
+      // sigma^2[i]
+      team
+        .map(({ sigma }) => sigma ** 2 + (options.tau ? options.tau ** 2 : 0))
+        .reduce(sum, 0),
+      // (original team data)
+      team.map((player) => {
+        return {
+          ...player,
+          sigma: !options.tau
+            ? player.sigma
+            : Math.sqrt(player.sigma ** 2 + options.tau ** 2),
+        }
+      }),
+      // rank[i]
+      rank[i],
+    ])
+    return out
+  }
 }
 
 export const ladderPairs = (ranks) => {

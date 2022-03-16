@@ -182,6 +182,7 @@ describe('rate', () => {
     const a = rating({ mu: 25, sigma: 3 })
     const b = rating({ mu: 25, sigma: 3 })
     const [[winner], [loser]] = rate([[a], [b]], {
+      switch: true,
       tau: 0.3,
     })
 
